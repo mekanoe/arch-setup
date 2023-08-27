@@ -35,6 +35,8 @@ ucode=$(cat /proc/cpuinfo | grep -qe GenuineIntel > /dev/null && echo intel-ucod
 rm -rf /mnt/boot/*-ucode.img
 pacstrap -K /mnt linux-zen linux-zen-headers linux-firmware $ucode zsh git base-devel
 
+genfstab -U /mnt >> /mnt/etc/fstab
+
 echo ">> Pulling fresh.sh installer"
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/fresh.sh > /mnt/.remove-before-flight/fresh.sh
 
