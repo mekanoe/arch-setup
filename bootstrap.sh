@@ -1,9 +1,9 @@
 set -e
-set -o pipefail
 echo ">> NOTE: If this fails early, you forgot to mount your partitions."
-mkdir /mnt/.remove-before-flight > /dev/null 2>&1
-mount | grep -e '/mnt type' | cut -d' ' -f1 > /mnt/.remove-before-flight/rootfs
 mount | grep -e '/mnt/boot type'
+test -d /mnt/.remove-before-flight || mkdir /mnt/.remove-before-flight
+set -o pipefail
+mount | grep -e '/mnt type' | cut -d' ' -f1 > /mnt/.remove-before-flight/rootfs
 set +o pipefail
 
 echo ">> Setting up mkinitcpio"
