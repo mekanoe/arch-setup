@@ -32,6 +32,7 @@ cp /mnt/etc/mkinitcpio.d/linux-zen.preset /etc/mkinitcpio.d/linux-zen.preset
 
 echo ">> Installing packages"
 ucode=$(cat /proc/cpuinfo | grep -qe GenuineIntel > /dev/null && echo intel-ucode || echo amd-ucode)
+rm -rf /mnt/boot/*-ucode.img
 pacstrap -K /mnt linux-zen linux-zen-headers linux-firmware $ucode zsh git base-devel
 
 echo ">> Pulling fresh.sh installer"
