@@ -35,6 +35,8 @@ initrd /initramfs-linux-zen.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value $disk_dev) rw
 EOF
 
+mkinitcpio -P
+
 echo ">> Setting root password"
 passwd
 chsh -s /usr/bin/zsh root
