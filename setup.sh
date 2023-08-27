@@ -38,7 +38,7 @@ enable_reflector() {
 --fastest 10
 EOF
 
-  rm /usr/lib/systemd/system/reflector.timer
+  sudo rm -f /usr/lib/systemd/system/reflector.timer
   sudo tee /etc/systemd/system/reflector.timer <<EOF
 [Unit]
 Description=Refresh Pacman mirrorlist daily with Reflector.
