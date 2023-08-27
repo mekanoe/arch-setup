@@ -40,5 +40,5 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo ">> Pulling fresh.sh installer"
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/fresh.sh > /mnt/.remove-before-flight/fresh.sh
 
-echo ">> Chrooting into new system. Run \`bash /.remove-before-flight/fresh.sh\` when you're ready."
-arch-chroot /mnt
+echo ">> Chrooting into new system. Running \`bash /.remove-before-flight/fresh.sh\`"
+arch-chroot /mnt bash /.remove-before-flight/fresh.sh
