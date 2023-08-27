@@ -10,8 +10,5 @@ pacstrap -K /mnt linux-zen linux-zen-headers linux-firmware $ucode zsh git base-
 mkdir /mnt/.remove-before-flight > /dev/null 2>&1
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/fresh.sh > /mnt/.remove-before-flight/fresh.sh
 
-
-genfstab -U /mnt >> /mnt/etc/fstab
-
 echo ">> Chrooting into new system. Run \`bash /.remove-before-flight/fresh.sh\` when you're ready."
 arch-chroot /mnt

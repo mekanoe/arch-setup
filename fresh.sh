@@ -35,6 +35,7 @@ initrd /initramfs-linux-zen.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value $disk_dev) rw
 EOF
 
+genfstab -U / >> /etc/fstab
 mkinitcpio -P
 
 echo ">> Setting root password"
