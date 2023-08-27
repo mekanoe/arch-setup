@@ -55,5 +55,7 @@ noe ALL=(ALL) NOPASSWD:ALL
 EOF
 
 echo ">> Installing packages"
+pacman-key --init
+pacman-key --populate
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh > /.remove-before-flight/setup.sh
 sudo -u noe bash /.remove-before-flight/setup.sh
