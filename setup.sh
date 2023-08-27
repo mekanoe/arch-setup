@@ -24,6 +24,8 @@ install_basic_packages() {
     --save
 
   yay -S --noconfirm oh-my-zsh-git
+
+  enable_reflector
 }
 
 enable_reflector() {
@@ -51,9 +53,11 @@ RandomizedDelaySec=12h
 WantedBy=timers.target
 EOF
 
-  run sudo systemctl daemon-reload
-  run sudo systemctl enable --now reflector.service
-  run sudo systemctl enable --now reflector.timer
+  sudo systemctl daemon-reload
+  sudo systemctl enable reflector.service
+  sudo systemctl enable reflector.timer
+
+  run sudo reflector @/etc/xdg/reflector/reflector.conf
 }
 
 install_configs() {
@@ -100,7 +104,7 @@ install_essentials() {
     gnome-tweaks \
     gnome-shell-extensions
 
-  run sudo systemctl enable --now gdm
+  run sudo systemctl enable gdm
 }
 
 nv_desktop() {
