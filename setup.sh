@@ -61,6 +61,7 @@ EOF
 }
 
 install_configs() {
+  rm -rf /tmp/arch-setup
   mkdir -p /tmp/arch-setup
   cd /tmp/arch-setup
   git clone https://github.com/mekanoe/arch-setup.git .
@@ -127,7 +128,7 @@ nv_laptop() {
 # =>> FLATPAKS =>>
 install_flatpaks() {
   run sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  run sudo flatpak install -y flathub com.spotify.Client
+  # run sudo flatpak install -y flathub com.spotify.Client
   run sudo flatpak install -y flathub com.discordapp.Discord
   run sudo flatpak install -y flathub com.mattjakeman.ExtensionManager
   run sudo flatpak install -y flathub org.mozilla.firefox
@@ -176,7 +177,6 @@ main() {
   install_essentials
   install_flatpaks
   configure_flatpak
-  setup_crycord
   install_configs
 
   test -d /.remove-before-flight && echo "Run \`rm -rf /.remove-before-flight\` if needed."
