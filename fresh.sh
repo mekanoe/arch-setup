@@ -43,4 +43,8 @@ echo ">> Creating user"
 useradd -m -G wheel -s /usr/bin/zsh noe
 passwd noe
 
+tee /etc/sudoers.d/10-noe <<EOF
+noe ALL=(ALL) NOPASSWD:ALL
+EOF
+
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh | sudo -u noe bash

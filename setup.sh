@@ -7,7 +7,7 @@ run() {
 
 # =>> BASICS =>>
 install_basic_packages() {
-  run sudo pacman -Syyu --noconfirm --needed git base-devel
+  run sudo pacman -Syyu --noconfirm --needed git base-devel reflector
 
   mkdir -p /tmp/yay
   cd /tmp/yay
@@ -24,6 +24,52 @@ install_basic_packages() {
     --save
 
   yay -S --noconfirm oh-my-zsh-git
+}
+
+enable_reflector() {
+    sudo tee /etc/xdg/reflector/reflector.conf <<EOF
+--save /etc/pacman.d/mirrorlist
+--latest 25
+--sort rate
+--protocol https
+--country US
+--fastest 10
+EOF
+
+  rm /usr/lib/systemd/system/reflector.timer
+  sudo tee /etc/systemd/system/reflector.timer <<EOF
+[Unit]
+Description=Refresh Pacman mirrorlist daily with Reflector.
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+AccuracySec=1us
+RandomizedDelaySec=12h
+
+[Install]
+WantedBy=timers.target
+EOF
+
+  run sudo systemctl daemon-reload
+  run sudo systemctl enable --now reflector.service
+  run sudo systemctl enable --now reflector.timer
+}
+
+install_configs() {
+  mkdir -p /tmp/arch-setup
+  cd /tmp/arch-setup
+  git clone https://github.com/mekanoe/arch-setup.git .
+
+  # ZSH
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting 
+  git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+  cp configs/.zshrc ~/.zshrc
+
+  # Kitty
+  mkdir -p ~/.config/kitty
+  cp configs/kitty.conf ~/.config/kitty/kitty.conf
 }
 
 # =>> ESSENTIALS =>>
@@ -47,7 +93,12 @@ install_essentials() {
     visual-studio-code-bin \
     kitty \
     kitty-terminfo \
-    tailscale
+    tailscale \
+    ttf-fira-code \
+    ttf-atkinson-hyperlegible \
+    gnome \
+    gnome-tweaks \
+    gnome-shell-extensions
 }
 
 nv_desktop() {
@@ -86,13 +137,28 @@ configure_flatpak() {
 
 # =>> THEMES =>>
 setup_crycord() {
-  mkdir -p ~/.config/discord
+  mkdir -p ~/.config/discord > /dev/null 2>&1
   echo '@import "https://raw.githack.com/mekanoe/mekadnome/mekadnome.css";' > ~/.config/discord/mekadnome.css
   crycord -c ~/.config/discord/mekadnome.css -p enable_css,enable_https,enable_web_tools
 }
 
 # =>> INTERNAL UTILS =>>
 fn_exists() { declare -F "$1" > /dev/null; }
+
+help() {
+  echo <<EOF
+Usage: $0 [option]
+
+(no args): full install script. likely non-destructive.
+
+extra: 
+  nv-desktop: NVIDIA desktop install
+  nv-laptop: NVIDIA laptop install
+  help: this message
+  steam: install steam w/ extras
+
+EOF
+}
 
 # =>> MAIN =>>
 main() {
@@ -103,8 +169,9 @@ main() {
   install_flatpaks
   configure_flatpak
   setup_crycord
+  install_configs
 
-  echo "Run \`rm -rf /.remove-before-flight\`."
+  test -d /.remove-before-flight && echo "Run \`rm -rf /.remove-before-flight\` if needed."
 }
 
 main "$@"
