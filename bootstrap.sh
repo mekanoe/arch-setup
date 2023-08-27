@@ -1,5 +1,5 @@
 ucode=$(cat /proc/cpuinfo | grep -qe GenuineIntel > /dev/null && echo intel-ucode || echo amd-ucode)
-pacstrap -K /mnt -Syu --needed linux-zen linux-zen-headers linux-firmware $ucode zsh git base-devel
+pacstrap -K /mnt -S linux-zen linux-zen-headers linux-firmware $ucode zsh git base-devel
 
 mkdir /mnt/.remove-before-flight
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/fresh.sh > /mnt/.remove-before-flight/fresh.sh
