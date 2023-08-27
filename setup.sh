@@ -99,6 +99,8 @@ install_essentials() {
     gnome \
     gnome-tweaks \
     gnome-shell-extensions
+
+  run sudo systemctl enable --now gdm
 }
 
 nv_desktop() {
@@ -120,7 +122,7 @@ nv_laptop() {
 
 # =>> FLATPAKS =>>
 install_flatpaks() {
-  run sudo flatpak repo add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  run sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   run sudo flatpak install -y flathub com.spotify.Client
   run sudo flatpak install -y flathub com.discordapp.Discord
   run sudo flatpak install -y flathub com.mattjakeman.ExtensionManager
@@ -133,6 +135,8 @@ install_flatpaks() {
 configure_flatpak() {
   run sudo flatpak override --filesystem=~/.local/share/themes
   run sudo flatpak override --filesystem=~/.config/discord com.discordapp.Discord
+  run sudo flatpak override --filesystem=xdg-config/gtk-3.0
+  run sudo flatpak override --filesystem=xdg-config/gtk-4.0
 }
 
 # =>> THEMES =>>

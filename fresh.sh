@@ -2,7 +2,7 @@
 
 set -e
 
-read new_hostname -p "What's our hostname? =>> "
+read -p "What's our hostname? =>> " new_hostname
 echo "$new_hostname" > /etc/hostname
 
 ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
@@ -18,7 +18,7 @@ bootctl install
 
 detected_root=$(cat /.remove-before-flight/rootfs)
 ls -l /dev/disk/by-partuuid
-read disk_dev -p "What's the install disk device? (default: $detected_root) =>> "
+read -p "What's the install disk device? (default: $detected_root) =>> " disk_dev
 disk_dev=${disk_dev:-$detected_root}
 
 cat <<EOF > /boot/loader/loader.conf
@@ -47,4 +47,5 @@ tee /etc/sudoers.d/10-noe <<EOF
 noe ALL=(ALL) NOPASSWD:ALL
 EOF
 
-curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh | sudo -u noe bash
+curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh > /.remove-before-flight/setup.sh
+sudo -u noe bash /.remove-before-flight/setup.sh
