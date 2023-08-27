@@ -1,5 +1,7 @@
+set -e
 set -o pipefail
 mount | grep -e '/mnt type' | cut -d' ' -f1 > /mnt/.remove-before-flight/rootfs
+mount | grep -e '/mnt/boot type'
 set +o pipefail
 
 ucode=$(cat /proc/cpuinfo | grep -qe GenuineIntel > /dev/null && echo intel-ucode || echo amd-ucode)
