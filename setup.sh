@@ -103,6 +103,8 @@ main() {
   install_flatpaks
   configure_flatpak
   setup_crycord
+
+  echo "Run \`rm -rf /.remove-before-flight\`."
 }
 
 main "$@"

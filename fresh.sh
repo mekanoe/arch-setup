@@ -13,13 +13,13 @@ echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 
 ucode=$(cat /proc/cpuinfo | grep -qe GenuineIntel > /dev/null && echo intel-ucode || echo amd-ucode)
-pacman -Syu --needed linux-zen linux-zen-headers $ucode
 
 bootctl install
 
+detected_root=$(cat /.remove-before-flight/rootfs)
 ls -l /dev/disk/by-partuuid
-
-read disk_dev -p "What's the install disk device? (ex: /dev/nvme0n1p1) =>> "
+read disk_dev -p "What's the install disk device? (default: $detected_root) =>> "
+disk_dev=${disk_dev:-$detected_root}
 
 cat <<EOF > /boot/loader/loader.conf
 default arch.conf
@@ -41,3 +41,6 @@ chsh -s /usr/bin/zsh root
 
 echo ">> Creating user"
 useradd -m -G wheel -s /usr/bin/zsh noe
+passwd noe
+
+curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh | sudo -u noe bash
