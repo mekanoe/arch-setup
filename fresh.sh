@@ -38,6 +38,8 @@ initrd /initramfs-linux-zen.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value $disk_dev) rw
 EOF
 
+pacman -S --noconfirm --needed arch-install-scripts
+
 echo ">> Generating fstab"
 genfstab -U / >> /etc/fstab
 
@@ -58,5 +60,6 @@ noe ALL=(ALL) NOPASSWD:ALL
 EOF
 
 echo ">> Installing packages"
+pacman -R --noconfirm arch-install-scripts
 curl -sSL https://raw.githack.com/mekanoe/arch-setup/main/setup.sh > /.remove-before-flight/setup.sh
 sudo -u noe bash /.remove-before-flight/setup.sh
